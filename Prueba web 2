@@ -1,0 +1,102 @@
+import json
+from fastapi import FastAPI
+
+frutas = [
+    "Manzana",
+    "Pera",
+    "Limon",
+    "Aguacate",
+]
+
+app = FastAPI()
+
+@app.get("/frutas")
+def obtener_frutas():
+    with open("frutas.json", "r") as file:
+        texto = file.read()
+        frutas_json = json.loads(texto)
+        print(frutas_json)
+    
+    return frutas_json
+
+@app.get("/frutas/{fruta_id}")
+def obtener_fruta(fruta_id: int):
+    with open("frutas.json", "r") as file:
+        texto = file.read()
+        frutas_json = json.loads(texto)
+        print(frutas_json[fruta_id])
+    
+    return frutas_json[fruta_id]
+
+@app.post("/frutas")
+def crear_fruta(nueva_fruta: str, color: str):
+   
+    with open("frutas.json", "r") as file:
+        texto = file.read()
+        frutas_json = json.loads(texto)
+    
+   
+    frutas_json.append({
+        "nombre": nueva_fruta,
+        "color": color
+    })
+    
+    
+    with open("frutas.json", "w") as file:
+        json.dump(frutas_json, file, ensure_ascii=False, indent=4)
+    
+    return frutas_json
+
+@app.put("/frutas/{fruta_id}")
+def actualizar_fruta(fruta_id: int, nueva_fruta: str, color: str):
+  
+    with open("frutas.json", "r") as file:
+        texto = file.read()
+        frutas_json = json.loads(texto)
+    
+    
+    frutas_json[fruta_id] = {
+        "nombre": nueva_fruta,
+        "color": color
+    }
+    
+    return frutas_json
+
+@app.delete("/frutas/{fruta_id}")
+def eliminar_fruta(fruta_id: int):
+    
+    with open("frutas.json", "r") as file:
+        texto = file.read()
+        frutas_json = json.loads(texto)
+        del frutas_json[fruta_id]
+    
+    return frutas_json
+[
+
+{
+    "nombre": "Manzana",
+    "Color": "Roja",
+    "Precio": "20000"
+},
+
+
+{
+    "nombre": "Pera",
+    "Color": "verde",
+    "Precio": "15000"
+    },
+
+
+{
+"nombre": "Banano",
+"Color": "amarillo",
+"Precio": "20000"
+},
+
+{
+    "nombre": "Limon",
+    "Color": "verde",
+    "Precio": "20000"
+    }
+
+]
